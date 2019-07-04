@@ -42,7 +42,7 @@ def main():
                         help="DAGChainer output from CoGe SynMap")
     parser.add_argument("-p", "--pairfile", required=True,
                         help="tsv file with one gene pair per line, genes separated by '\t'")
-    parser.add_argument("-o", "--outputDir", required=True,
+    parser.add_argument("-o", "--output", required=True,
                         help="Desired output directory")
     args = parser.parse_args()
 
@@ -60,7 +60,7 @@ def main():
 
     syn_pairs = pd.DataFrame(
         columns=['g1', 'g2', 's1', 's2'], data=find_all_syntenic_pairs(genepairs, binned))
-    syn_pairs.to_csv(args.outputDir, sep="\t", index=False)
+    syn_pairs.to_csv(args.output, sep="\t", index=False)
 
 
 def find_all_syntenic_pairs(genepairs, binned):
