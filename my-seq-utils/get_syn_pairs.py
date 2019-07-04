@@ -10,7 +10,7 @@ import pandas as pd
 parser = argparse.ArgumentParser()
 parser.add_argument("-s", "--synfile", help = "DAGChainer output from CoGe SynMap")
 parser.add_argument("-p", "--pairfile", help = "tsv file with one gene pair per line, genes separated by '\t'")
-parser.add_argument("-o", "--outputDir", help = "Desired output directory")
+parser.add_argument("-o", "--output", help = "Desired output directory")
 args = parser.parse_args()
 
 
@@ -26,7 +26,6 @@ def main():
     count = 0;
     for i, row in genepairs.iterrows():
         count = count + 1
-        print(f"ran find function {count} times")
         syn_temp = find_syntenic_pairs(dag, row['g1'], row['g2'])
         syn_pairs = pd.concat([syn_pairs, syn_temp])
 
@@ -38,18 +37,16 @@ def main():
 def find_syntenic_pairs(df, g1, g2):
 
     # fetch syntenic pairs for gene1 and gene2
-    g1_syn = df.loc[df['gene1'] == str(g1)]
-    g2_syn = df.loc[df['gene1'] == str(g2)]
+    g1_syn = df.loc[df['gene1'] == g1]
+    g2_syn = df.loc[df['gene1'] == g2]
 
     df_syn = pd.DataFrame(columns=['g1', 'g2', 's1', 's2'])
 
     if not g1_syn.empty:
-        print("running synteny find")
         for x, row_g1 in g1_syn.iterrows():
             for y, row_g2 in g2_syn.iterrows():
                 # check if gene1 and gene2 contain syntenic pairs on same chromosome
                 if is_syntenic_pair(row_g1, row_g2):
-                    print("syntenic pairs found!")
                     new_row = [row_g1['gene1'], row_g2['gene1'], row_g1['gene2'], row_g2['gene2']]
                     df_syn.loc[len(df_syn)] = new_row
 
