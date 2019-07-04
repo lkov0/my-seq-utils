@@ -55,8 +55,9 @@ def main():
     # create an index that is essentially { gene: { chr: [...] } }, where the inner lists are sorted on start2
     binned = defaultdict(lambda: defaultdict(lambda: []))
     for _, d in dag.iterrows():
-        bisect.insort_left(binned[str(d['gene1'])]
-                           [str(d['chr2'])], sortable_dag_row(d))
+        bisect.insort_left(
+            binned[str(d['gene1'])][str(d['chr2'])],
+            sortable_dag_row(d))
 
     syn_pairs = pd.DataFrame(
         columns=['g1', 'g2', 's1', 's2'], data=find_all_syntenic_pairs(genepairs, binned))
